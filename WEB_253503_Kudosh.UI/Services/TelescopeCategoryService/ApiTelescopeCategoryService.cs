@@ -23,10 +23,8 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeCategoryService
         }
         public async Task<ResponseData<List<CategoryEntity>>> GetCategoryListAsync()
         {
-            // подготовка URL запроса
             var urlString = new StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}telescopecategories/");
             
-            // отправить запрос к API
             var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
             if (response.IsSuccessStatusCode)
             {

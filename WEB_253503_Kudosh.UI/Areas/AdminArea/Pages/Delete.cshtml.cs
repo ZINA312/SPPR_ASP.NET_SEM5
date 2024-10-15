@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http;
 using WEB_253503_Kudosh.Domain.Entities;
 using WEB_253503_Kudosh.UI.Services.TelescopeProductService;
 
-namespace WEB_253503_Kudosh.UI.Areas.AdminArea.Views
+namespace WEB_253503_Kudosh.UI.Areas.AdminArea.Views.Admin
 {
-    public class EditModel : PageModel
+    public class DeleteModel : PageModel
     {
         private readonly ITelescopeService _telescopeService;
 
-        public EditModel(ITelescopeService telescopeService)
+        public DeleteModel(ITelescopeService telescopeService)
         {
             _telescopeService = telescopeService;
         }
@@ -39,21 +35,18 @@ namespace WEB_253503_Kudosh.UI.Areas.AdminArea.Views
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(IFormFile? formFile)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid)
+            if (id <= 0)
             {
-                return Page();
+                return NotFound();
             }
 
-            try
+            var telescopeResponse = await _telescopeService.GetProductByIdAsync(id);
+            if (telescopeResponse != null && telescopeResponse.Data != null)
             {
-                await _telescopeService.UpdateProductAsync(TelescopeEntity.Id, TelescopeEntity, formFile);
-            }
-            catch (Exception ex) 
-            {
-                ModelState.AddModelError(string.Empty, $"Error updating product: {ex.Message}");
-                return Page();
+                TelescopeEntity = telescopeResponse.Data;
+                await _telescopeService.DeleteProductAsync(id);
             }
 
             return RedirectToPage("./Index");

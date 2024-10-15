@@ -10,6 +10,7 @@
     <Folder Include="Areas\AdminArea\Controllers\" />
     <Folder Include="Areas\AdminArea\Data\" />
     <Folder Include="Areas\AdminArea\Models\" />
+    <Folder Include="Areas\AdminArea\Views\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 

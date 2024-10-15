@@ -1,0 +1,83 @@
+﻿@page
+@model WEB_253503_Kudosh.UI.Areas.AdminArea.Views.Admin.IndexModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1 class="text-center">Администрирование</h1>
+
+<div class="text-end mb-3">
+    <a class="btn btn-primary" asp-page="/Create">Создать новый</a>
+</div>
+
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Изображение</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (@Model.TelescopeEntities.Count == 0)
+        {
+            <tr>
+                <td colspan="5" class="text-center">Нет телескопов</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in @Model.TelescopeEntities)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>
+                        <img src="@Html.DisplayFor(modelItem => item.ImagePath)" class="img-thumbnail" style="max-width: 100px;" />
+                    </td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" asp-page="/Edit" asp-route-id="@item.Id">Изменить</a>
+                        <a class="btn btn-info btn-sm" asp-page="/Details" asp-route-id="@item.Id">Детали</a>
+                        <a class="btn btn-danger btn-sm" asp-page="/Delete" asp-route-id="@item.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="./Index" asp-route-pagenumber="1">На первую</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-page="./Index" asp-route-pagenumber="@(Model.CurrentPage - 1)">Предыдущая</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-page="./Index" asp-route-pagenumber="@i">@i</a>
+                </li>
+            }
+
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="./Index" asp-route-pagenumber="@(Model.CurrentPage + 1)">Следующая</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-page="./Index" asp-route-pagenumber="@Model.TotalPages">На последнюю</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

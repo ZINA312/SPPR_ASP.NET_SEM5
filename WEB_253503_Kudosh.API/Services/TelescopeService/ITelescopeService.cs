@@ -11,12 +11,10 @@ namespace WEB_253503_Kudosh.API.Services.TelescopeService
 
         public Task<ResponseData<TelescopeEntity>> GetProductByIdAsync(int id);
 
-        public Task UpdateProductAsync(int id, TelescopeEntity product, IFormFile? formFile);
+        public Task<ResponseData<bool>> UpdateProductAsync(int id, TelescopeEntity product);
 
-        public Task DeleteProductAsync(int id);
+        public Task<ResponseData<bool>> DeleteProductAsync(int id);
 
-        public Task<ResponseData<TelescopeEntity>> CreateProductAsync(TelescopeEntity product, IFormFile? formFile);
-
-        public Task<ResponseData<string>> SaveImageAsync(int id, IFormFile formFile);
+        public Task<ResponseData<TelescopeEntity>> CreateProductAsync(TelescopeEntity product);
     }
 }

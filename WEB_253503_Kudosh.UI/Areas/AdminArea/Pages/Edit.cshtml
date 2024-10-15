@@ -1,17 +1,17 @@
 ﻿@page
-@model WEB_253503_Kudosh.UI.Areas.AdminArea.Views.EditModel
+@model WEB_253503_Kudosh.UI.Areas.AdminArea.Views.Admin.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактирование";
 }
 
-<h1>Edit</h1>
+<h1>Редактирование</h1>
 
-<h4>TelescopeEntity</h4>
+<h4>Телескоп</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TelescopeEntity.Id" />
             <div class="form-group">
@@ -30,14 +30,16 @@
                 <span asp-validation-for="TelescopeEntity.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TelescopeEntity.ImagePath" class="control-label"></label>
-                <input asp-for="TelescopeEntity.ImagePath" class="form-control" />
-                <span asp-validation-for="TelescopeEntity.ImagePath" class="text-danger"></span>
+                <label asp-for="TelescopeEntity.Category" class="control-label">Category</label>
+                <select asp-for="TelescopeEntity.CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                    <option value="">Select a category</option>
+                </select>
+                <span asp-validation-for="TelescopeEntity.Category" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TelescopeEntity.MimeType" class="control-label"></label>
-                <input asp-for="TelescopeEntity.MimeType" class="form-control" />
-                <span asp-validation-for="TelescopeEntity.MimeType" class="text-danger"></span>
+                <label for="fileUpload" class="control-label">Upload Image</label>
+                <input asp-for="@Model.Image" type="file" id="formFile" name="formFile" class="form-control" />
+                <span asp-validation-for="TelescopeEntity.ImagePath" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -51,5 +53,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

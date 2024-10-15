@@ -8,18 +8,18 @@ namespace WEB_253503_Kudosh.UI.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ITelescopeService _productService;
+        private readonly ITelescopeService _telescopeService;
         private readonly ICategoryService _categoryService;
 
-        public ProductController(ITelescopeService productService, ICategoryService categoryService)
+        public ProductController(ITelescopeService telescopeService, ICategoryService categoryService)
         {
-            _productService = productService;
+            _telescopeService = telescopeService;
             _categoryService = categoryService;
         }
 
         public async Task<IActionResult> Index(string category, int pageNo = 1)
         {
-            var productResponse = await _productService.GetProductListAsync(category, pageNo);
+            var productResponse = await _telescopeService.GetProductListAsync(category, pageNo);
             if (!productResponse.Successfull)
                 return NotFound(productResponse.ErrorMessage);
 

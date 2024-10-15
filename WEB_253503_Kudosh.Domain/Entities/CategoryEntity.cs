@@ -1,21 +1,30 @@
-﻿namespace WEB_253503_Kudosh.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace WEB_253503_Kudosh.Domain.Entities
 {
     public class CategoryEntity
     {
-        public int _id;
-        public string _name;
-        public string _normalizedName;
-
         public CategoryEntity() { }
+        public CategoryEntity(CategoryEntity entity)
+        {
+            Id = entity.Id;
+            Name = entity.Name;
+            NormalizedName = entity.NormalizedName;
+        }
         public CategoryEntity(int id, string name, string normalizedName)
         {
-            _id = id;
-            _name = name;
-            _normalizedName = normalizedName;
+            Id = id;
+            Name = name;
+            NormalizedName = normalizedName;
         }
 
-        public int Id { get { return _id; } private set { _id = value; } }
-        public string Name { get { return _name; } set { _name = value; } }
-        public string NormalizedName { get { return _normalizedName; } set { _normalizedName = value; } }
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("normalizedName")]
+        public string NormalizedName { get; set; }
     }
 }

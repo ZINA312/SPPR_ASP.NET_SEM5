@@ -1,6 +1,15 @@
 ﻿@{
-    var currentController = ViewContext.RouteData.Values["controller"].ToString();
-    var currentAction = ViewContext.RouteData.Values["action"].ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "UnknownController";
+    var currentAction = "UnknownAction";
+    if (ViewContext.RouteData != null && ViewContext.RouteData.Values.ContainsKey("action"))
+    {
+        currentAction = ViewContext.RouteData.Values["action"].ToString();
+    }
+    else
+    {
+        currentAction = "UnknownAction";
+    }
+    var currentPage = Context.Request.Path.Value;
 }
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -8,6 +17,6 @@
     <div class="navbar-nav">
         <a class="nav-item nav-link @(currentController == "HomeController" && currentAction == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">Лб 1</a>
         <a class="nav-item nav-link @(currentController == "ProductController" && currentAction == "Index" ? "active" : "")" asp-controller="Product" asp-action="Index">Каталог</a>
-        <a class="nav-item nav-link @(currentController == "AdminArea" && currentAction == "Index" ? "active" : "")" asp-area="AdminArea" asp-page="/Index">Администрирование</a>
+        <a class="nav-item nav-link @(currentPage == "/Admin/Index" ? "active" : "")" asp-area="AdminArea" asp-page="/Index">Администрирование</a>
     </div>
 </nav>
