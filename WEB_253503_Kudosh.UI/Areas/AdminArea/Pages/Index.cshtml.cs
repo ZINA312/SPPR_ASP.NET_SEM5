@@ -26,9 +26,9 @@ namespace WEB_253503_Kudosh.UI.Areas.AdminArea.Views.Admin
         public int CurrentPage { get; set; }
         [BindProperty]
         public int TotalPages {  get; set; }
-        public async Task OnGetAsync(int pageNumber = 1)
+        public async Task OnGetAsync(int pageNo = 1)
         {
-            var response = await _telescopeService.GetProductListAsync(null, pageNumber);
+            var response = await _telescopeService.GetProductListAsync(null, pageNo);
             if (response?.Data?.Items != null)
             {
                 TelescopeEntities = response.Data.Items;

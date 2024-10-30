@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using WEB_253503_Kudosh.UI.Services.Authentication;
 using WEB_253503_Kudosh.UI.Services.TelescopeProductService;
 
 namespace WEB_253503_Kudosh.UI.Services.FileService
@@ -10,10 +11,12 @@ namespace WEB_253503_Kudosh.UI.Services.FileService
 
         private readonly HttpClient _httpClient;
         ILogger _logger;
-        public ApiFileService(HttpClient httpClient, ILogger<ApiFileService> logger)
+        ITokenAccessor _tokenAccessor;
+        public ApiFileService(HttpClient httpClient, ILogger<ApiFileService> logger, ITokenAccessor tokenAccessor)
         {
             _httpClient = httpClient;
             _logger = logger;
+            _tokenAccessor = tokenAccessor;
         }
 
         public async Task<string> SaveFileAsync(IFormFile formFile)
@@ -28,6 +31,7 @@ namespace WEB_253503_Kudosh.UI.Services.FileService
             var streamContent = new StreamContent(formFile.OpenReadStream());
             content.Add(streamContent, "file", newName);
             request.Content = content;
+            _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
@@ -43,6 +47,7 @@ namespace WEB_253503_Kudosh.UI.Services.FileService
             };
             StringContent content = new StringContent(fileName);
             request.Content = content;
+            _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
             {

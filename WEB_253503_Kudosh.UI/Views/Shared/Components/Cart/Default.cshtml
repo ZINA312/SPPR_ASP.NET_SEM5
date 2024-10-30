@@ -1,6 +1,6 @@
-﻿<a class="navbar-text ms-auto" asp-controller="CartController" asp-action="Index">
-    <div class="cart-info">
-        <span>0.00 руб</span>
-        <i class="fa-solid fa-cart-shopping"></i>(0)
-    </div>
-</a>
+﻿@model WEB_253503_Kudosh.Domain.Entities.Cart
+
+<div class="cart-info navbar-text ms-auto">
+    <span style="color: white">@Model.TotalPrice.ToString("0.00") руб</span>
+    <i class="fa-solid fa-cart-shopping" style="color: white"></i><span style="color: white">(@Model.Count)</span>
+</div>

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using WEB_253503_Kudosh.API.Services.TelescopeService;
 using WEB_253503_Kudosh.Domain.Entities;
 using WEB_253503_Kudosh.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WEB_253503_Kudosh.API.Controllers
 {
@@ -24,6 +25,7 @@ namespace WEB_253503_Kudosh.API.Controllers
 
         // GET: api/TelescopeEntities
         [HttpGet("telescopes")]
+        [AllowAnonymous]
         public async Task<ActionResult<ResponseData<List<TelescopeEntity>>>> GetTelescopes(string? category,
                                                                                         int pageNo = 1,
                                                                                         int pageSize = 3)
@@ -33,6 +35,7 @@ namespace WEB_253503_Kudosh.API.Controllers
 
         // GET: api/TelescopeEntities/5
         [HttpGet("telescopes/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TelescopeEntity>> GetTelescopeEntity(int id)
         {
             var telescopeEntity = await _telescopeService.GetProductByIdAsync(id);
@@ -47,6 +50,7 @@ namespace WEB_253503_Kudosh.API.Controllers
 
         // PUT: api/TelescopeEntities/5
         [HttpPut("telescopes/{id}")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> PutTelescopeEntity(int id)
         {
             var form = Request.Form;
@@ -71,6 +75,7 @@ namespace WEB_253503_Kudosh.API.Controllers
 
         // POST: api/TelescopeEntities
         [HttpPost ("telescopes")]
+        [Authorize(Policy = "admin")]
         public async Task<ActionResult<TelescopeEntity>> PostTelescopeEntity()
         {
             var form = Request.Form;
@@ -82,6 +87,7 @@ namespace WEB_253503_Kudosh.API.Controllers
 
         // DELETE: api/TelescopeEntities/5
         [HttpDelete("telescopes/{id}")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> DeleteTelescopeEntity(int id)
         {
             var result = await _telescopeService.DeleteProductAsync(id);

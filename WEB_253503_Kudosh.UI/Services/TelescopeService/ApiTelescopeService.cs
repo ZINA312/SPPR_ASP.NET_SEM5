@@ -6,6 +6,7 @@ using WEB_253503_Kudosh.Domain.Entities;
 using WEB_253503_Kudosh.Domain.Models;
 using System.Diagnostics;
 using WEB_253503_Kudosh.UI.Services.FileService;
+using WEB_253503_Kudosh.UI.Services.Authentication;
 
 namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
 {
@@ -16,8 +17,9 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
         string _pageSize;
         JsonSerializerOptions _serializerOptions;
         ILogger _logger;
+        ITokenAccessor _tokenAccessor;
         public ApiTelescopeService(HttpClient httpClient, IConfiguration configuration, 
-            ILogger<ApiTelescopeService> logger, IFileService fileService)
+            ILogger<ApiTelescopeService> logger, IFileService fileService, ITokenAccessor accessor)
         {
             _httpClient = httpClient;
             _pageSize = configuration.GetSection("ItemsPerPage").Value;
@@ -27,6 +29,7 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
             };
             _logger = logger;
             _fileService = fileService;
+            _tokenAccessor = accessor;
         }
         public async Task<ResponseData<TelescopeEntity>> CreateProductAsync(TelescopeEntity product, IFormFile? formFile)
         {
@@ -42,7 +45,7 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
 
             var jsonProduct = JsonSerializer.Serialize(product, _serializerOptions);
             content.Add(new StringContent(jsonProduct, Encoding.UTF8, "application/json"), "product");
-
+            _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.PostAsync("telescopes", content);
 
             if (response.IsSuccessStatusCode)
@@ -64,6 +67,7 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
 
         public async Task DeleteProductAsync(int id)
         {
+            _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.DeleteAsync($"telescopes/{id}");
 
             if (!response.IsSuccessStatusCode)
@@ -75,6 +79,7 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
 
         public async Task<ResponseData<TelescopeEntity>> GetProductByIdAsync(int id)
         {
+            _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.GetAsync($"telescopes/{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -115,6 +120,7 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
             {
                 urlString.Length--; 
             }
+            _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
             if (response.IsSuccessStatusCode)
             {
@@ -159,6 +165,7 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
                 }
             }
 
+            _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.PutAsync($"telescopes/{id}", content);
 
             if (response.IsSuccessStatusCode)
