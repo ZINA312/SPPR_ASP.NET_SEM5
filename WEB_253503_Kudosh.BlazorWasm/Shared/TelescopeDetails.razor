@@ -1,0 +1,17 @@
+﻿@if (SelectedTelescope != null)
+{
+    <div>
+        <img src="@SelectedTelescope.ImagePath" />
+        <h4>@SelectedTelescope.Name</h4>
+        <p>@SelectedTelescope.Description</p>
+        <p>Цена: @SelectedTelescope.Price</p>
+    </div>
+}
+else
+{
+    <p>Выберите телескоп для просмотра деталей.</p>
+}
+
+@code {
+    [Parameter] public TelescopeEntity SelectedTelescope { get; set; }
+}

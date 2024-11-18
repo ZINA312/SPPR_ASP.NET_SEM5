@@ -35,6 +35,8 @@ namespace WEB_253503_Kudosh.API.Services.TelescopeService
                                     .Take(pageSize)
                                     .ToList();
             dataList.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            if (pageNo > dataList.TotalPages)
+                return ResponseData<ListModel<TelescopeEntity>>.Error("No such page");
             dataList.CurrentPage = pageNo;
             return ResponseData<ListModel<TelescopeEntity>>.Success(dataList);
         }

@@ -1,0 +1,30 @@
+﻿@page "/telescopes"
+@inject IDataService DataService
+@attribute [Authorize]
+@using WEB_253503_Kudosh.BlazorWasm.Shared
+
+<h3>Telescopes</h3>
+
+<CategotySelector/>
+
+<TelescopesList TelescopeSelected="OnTelescopeSelected" />
+
+<TelescopePager/>
+
+<TelescopeDetails SelectedTelescope="SelectedTelescope" />
+
+@code {
+    public TelescopeEntity SelectedTelescope { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DataService.GetCategoryListAsync();
+        await DataService.GetProductListAsync();
+    }
+
+    void OnTelescopeSelected(int id)
+    {
+        Console.WriteLine(id);
+        SelectedTelescope = DataService.Telescopes.FirstOrDefault(t => t.Id == id);
+    }
+}

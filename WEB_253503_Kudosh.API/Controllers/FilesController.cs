@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Text;
 
 namespace WEB_253503_Kudosh.API.Controllers
 {
@@ -37,16 +39,28 @@ namespace WEB_253503_Kudosh.API.Controllers
             return Ok(fileUrl);
         }
         [HttpDelete]
-        public IActionResult DeleteFile(string fileName)
+        public async Task<IActionResult> DeleteFile()
         {
-            string path = Path.Combine(_imagePath, fileName);
-            var fileInfo = new FileInfo(path);
-            if (!string.IsNullOrEmpty(path) && fileInfo.Exists)
+            using (var reader = new StreamReader(Request.Body))
             {
-                fileInfo.Delete();
-                return Ok();
+                var url = await reader.ReadToEndAsync();
+                string fileName = Path.GetFileName(url);
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    return BadRequest("File name cannot be empty.");
+                }
+
+                string path = Path.Combine(_imagePath, fileName);
+                var fileInfo = new FileInfo(path);
+
+                if (fileInfo.Exists)
+                {
+                    fileInfo.Delete();
+                    return Ok();
+                }
+
+                return NotFound("File not found.");
             }
-            return BadRequest();
         }
     }
 }

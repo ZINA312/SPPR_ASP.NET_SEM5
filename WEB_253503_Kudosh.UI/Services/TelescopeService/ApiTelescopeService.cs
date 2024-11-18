@@ -142,10 +142,6 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
         public async Task<ResponseData<TelescopeEntity>> UpdateProductAsync(int id, TelescopeEntity product, IFormFile? formFile)
         {
             using var content = new MultipartFormDataContent();
-
-            var jsonProduct = JsonSerializer.Serialize(product, _serializerOptions);
-            content.Add(new StringContent(jsonProduct, Encoding.UTF8, "application/json"), "product");
-
             
             if (formFile != null)
             {
@@ -164,6 +160,9 @@ namespace WEB_253503_Kudosh.UI.Services.TelescopeProductService
                     throw new Exception($"Ошибка обновления продукта. Error: {getResponse.StatusCode}");
                 }
             }
+
+            var jsonProduct = JsonSerializer.Serialize(product, _serializerOptions);
+            content.Add(new StringContent(jsonProduct, Encoding.UTF8, "application/json"), "product");
 
             _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.PutAsync($"telescopes/{id}", content);

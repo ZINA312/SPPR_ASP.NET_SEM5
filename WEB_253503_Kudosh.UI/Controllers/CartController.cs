@@ -30,7 +30,6 @@ namespace WEB_253503_Kudosh.UI.Controllers
             if (data.Successfull)
             {
                 _cart.AddToCart(data.Data);
-                HttpContext.Session.Set<Cart>("cart", _cart);
             }
             return Redirect(returnUrl);
         }

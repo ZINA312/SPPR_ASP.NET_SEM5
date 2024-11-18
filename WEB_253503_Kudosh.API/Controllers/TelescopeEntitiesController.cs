@@ -23,9 +23,9 @@ namespace WEB_253503_Kudosh.API.Controllers
             _telescopeService = service;
         }
 
-        // GET: api/TelescopeEntities
+        // GET: api/Telescopes
         [HttpGet("telescopes")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<ActionResult<ResponseData<List<TelescopeEntity>>>> GetTelescopes(string? category,
                                                                                         int pageNo = 1,
                                                                                         int pageSize = 3)

@@ -1,14 +1,10 @@
-using WEB_253503_Kudosh.UI.Models;
-using WEB_253503_Kudosh.UI.Services.TelescopeCategoryService;
-using WEB_253503_Kudosh.UI.Services.TelescopeProductService;
-using WEB_253503_Kudosh.UI;
-using WEB_253503_Kudosh.UI.Services.FileService;
 using WEB_253503_Kudosh.UI.HelperClasses;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using WEB_253503_Kudosh.UI.Extensions;
-using System.Configuration;
+using Serilog;
+using Serilog.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +42,14 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+    .Filter.ByIncludingOnly(Matching.WithProperty<int>("StatusCode", status => status != 200))
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 

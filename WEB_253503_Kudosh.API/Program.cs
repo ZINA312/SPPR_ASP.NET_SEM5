@@ -33,6 +33,17 @@ builder.Services.AddAuthorization(opt =>
 {
     opt.AddPolicy("admin", p => p.RequireRole("POWER-USER"));
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:7225") 
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials();
+        });
+});
 
 var app = builder.Build();
 await DbInitializer.SeedData(app);
@@ -48,6 +59,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.MapControllers();
 
